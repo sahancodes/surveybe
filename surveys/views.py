@@ -10,7 +10,7 @@ from datetime import date
 from surveys.serializer import SurveySerializer, QuestionSerializer, AnswerSerializer, CompletedSerializer
 
 # Create your views here.
-@api_view(['GET'])
+@api_view(['POST'])
 def getsurvey(request):
     survey_req = JSONParser().parse(request)
     
