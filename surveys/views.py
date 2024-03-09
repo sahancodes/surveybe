@@ -10,7 +10,7 @@ from datetime import date
 from surveys.serializer import SurveySerializer, QuestionSerializer, AnswerSerializer, CompletedSerializer
 
 # Create your views here.
-@api_view(['GET'])
+@api_view(['POST'])
 def getsurvey(request):
     survey_req = JSONParser().parse(request)
     
@@ -18,22 +18,17 @@ def getsurvey(request):
         survey = get_object_or_404(Survey, survey_id=int(survey_req['survey_id']))
         questions = Question.objects.filter(survey_index = survey.survey_id)
 
-        answers = []
-        for question in questions:
-            answers.append(Answer.objects.filter(question_id=question.question_id))
-            print(Answer.objects.filter(question_id=question.question_id).values_list())
+        answers = Answer.objects.filter(question_id__in=questions.values_list('question_id', flat=True))
+        print(answers)
         
         survey_serializer = SurveySerializer(survey)
         question_serializer = QuestionSerializer(questions, many=True)
-        answer_serializer = []
-        serialized_answer_list = []
-        for answer in answers:
-            answer_serializer = AnswerSerializer(answer, many=True)
-            serialized_answer_list.append(answer_serializer.data)
-        print(serialized_answer_list)
+        answer_serializer = AnswerSerializer(answers, many=True)
 
-        return Response({"status": "success", "survey": survey_serializer.data, 
-                        "questions": question_serializer.data, "answers": serialized_answer_list}, 
+        return Response({"status": "success", 
+                         "survey": survey_serializer.data, 
+                        "questions": question_serializer.data, 
+                        "answers": answer_serializer.data}, 
                         status=status.HTTP_200_OK)
 
     except:
