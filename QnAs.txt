@@ -1,0 +1,26 @@
+Answers
+
+How long have you been inside the office?
+Choose the time from the selection below
+{"selection": ["30 mins", "10 mins", "Just now"]} 
+
+How do you feel at this moment?
+Choose from below given answers
+{"selection":["Good","Bad"]}
+
+If you feel uncomfortable, choose how uncomfortable you are?
+Select from the following
+{"selection":["Slightly uncomfortable", "Not comfortable at all"]}
+
+Did you get enough sleep last night?
+Select from the answers below
+{"selection": ["Not Enough", "Abrupt", "Just Enough", "Very good, I rested"]}
+
+Please choose your clothing
+Tick the ones you are already wearing
+{"selection": ["Pants", "Shorts", "T-Shirt", "Shirt", "Skirt", "Jacket", "Sweater", "Singlet", "Socks", "Stockings", "Sneakers", "Boots", "Shoes", "Mokasen"]}
+
+
+How did you arrive at work today?
+Select one from the options given below
+{"selection":["Bus", "Train", "Bicycle", "Scooter", "By Foot"]}

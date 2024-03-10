@@ -50,6 +50,10 @@ class Question(models.Model):
         return self.question_text
     
 class Answer(models.Model):
+
+    # class Meta:
+    #     db_table = "answers"
+
     answer_id = models.AutoField(primary_key=True)
     question_id = models.ForeignKey(Question, on_delete=models.PROTECT)
     answers = models.JSONField(null=True, blank=True)        #Using JSON format we can send answers suitable to different question types in Question class
