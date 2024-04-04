@@ -65,6 +65,24 @@ def signup(request):
             return Response( i_serializer.data, status=status.HTTP_201_CREATED)    #Return a response to the request eg: 200 OK
 
 
+@api_view(['POST'])
+def signupavailablity(request):
+
+    # try:
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        snt_usrname = data['username']
+        snt_email = data['email']
+
+        print(snt_usrname, snt_email)
+
+        if User.objects.filter(username=snt_usrname).exists() or User.objects.filter(email=snt_email).exists():
+            return JsonResponse({'isAvailable': False})
+        else:
+            return JsonResponse({'isAvailable': True})
+    # except Exception as e:
+    #     return JsonResponse({'error': str(e)}, status=400)
+
 
 @api_view(['GET'])
 def getuser(request):

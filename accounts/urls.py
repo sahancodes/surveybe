@@ -13,4 +13,5 @@ urlpatterns = [
     path('forgotpassword/', views.forgotpassword, name='forgot-password'),
     path('resetpassword/<str:token>/', views.resetpassword, name='reset-password'),
     path('changeuserdetails/<str:token>/', views.changeuserdetails),
+    path('checkuseremail/', views.signupavailablity),
 ]
