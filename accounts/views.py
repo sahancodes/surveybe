@@ -121,8 +121,9 @@ def loginuser(request):
         login(request, user)
         _, token = AuthToken.objects.create(user)
         find_acc = Account.objects.filter(username=data['username'])
+        user = User.objects.get(username=data['username'])
         updt_token = find_acc.update(authtoken = token)
-        return Response({'token': token}, status=status.HTTP_200_OK)
+        return Response({'token': token, 'user_id': user.pk}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
