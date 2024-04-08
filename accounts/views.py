@@ -57,6 +57,11 @@ def signup(request):
                 new_acc.worksstarttime = data['worksstarttime']
                 new_acc.workendtime = data['workendtime']
                 new_acc.selfstatement = data['selfstatement']
+
+                new_acc.rank = -1
+                new_acc.contribution = 25
+                new_acc.level = 1
+                
                 new_acc.save()
 
             except Account.DoesNotExist:
@@ -84,10 +89,10 @@ def signupavailablity(request):
     #     return JsonResponse({'error': str(e)}, status=400)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def getuser(request):
 
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = JSONParser().parse(request)
         find_acc = Account.objects.get(userid = int(data['userid']))
         get_acc = Account.objects.filter(userid = find_acc.userid)
