@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from accounts.models import Account
 from django.contrib.auth.models import User
-
+from accounts.models import Account
 
 # Create your models here.
 class Survey(models.Model):
@@ -61,6 +60,9 @@ class Answer(models.Model):
 
     def __str__(self):
         return str(self.answer_id) + "  " + str(self.question_id)
+    
+
+
     
 class CompletedSurvey(models.Model):
     response_id = models.AutoField(primary_key=True)

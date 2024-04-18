@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.urls import reverse
 from django.core.mail import send_mail
-from .models import Account
-from .serializers import AccountSerializer, InsertSerializer, UserSerializer, GetUserSerializer, IsUserLoggedIn, ForgotPasswordSerializer, UpdateSerializer
+from .models import Account, SurveyGroup
+from .serializers import AccountSerializer, InsertSerializer, SurveyGroupSerializer, UserSerializer, GetUserSerializer, IsUserLoggedIn, ForgotPasswordSerializer, UpdateSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, parser_classes
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
@@ -18,6 +18,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.authtoken.models import Token
 from django.http import HttpRequest
 from rest_framework.request import Request
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # # Create your views here.
@@ -230,5 +231,31 @@ def changeuserdetails(request, token):
         return Response(u_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# ------------------- GET ALL SURVEYS RELATED TO A GIVEN USER --------------------#
 
+@api_view(["POST"])
+def get_user_survey_details(request):
+    data = JSONParser().parse(request)
+    user_id = data['user_id']
+    if not user_id:
+        return JsonResponse({'error': 'User ID is required'}, status=400)
 
+    try:
+        user = Account.objects.get(userid=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+
+    # Filter SurveyGroup instances where the user is a member
+    survey_groups = SurveyGroup.objects.filter(members=user)
+
+    # Prepare data to send back
+    surveys_data = [{
+        'survey_id': sg.survey_id,  # Ensure survey_id is correctly pointing to a Survey object
+        'start_date': sg.start_date,
+        'end_date': sg.end_date,
+        'trigger_times': sg.trigger_times
+    } for sg in survey_groups]
+
+    survey_group_serializer = SurveyGroupSerializer(surveys_data, many=True)
+
+    return Response(survey_group_serializer.data, status=200)

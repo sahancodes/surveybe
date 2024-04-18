@@ -14,4 +14,5 @@ urlpatterns = [
     path('resetpassword/<str:token>/', views.resetpassword, name='reset-password'),
     path('changeuserdetails/<str:token>/', views.changeuserdetails),
     path('checkuseremail/', views.signupavailablity),
+    path('user-survey-details/', views.get_user_survey_details, name='user-survey-details'),
 ]
