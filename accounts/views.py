@@ -237,6 +237,7 @@ def changeuserdetails(request, token):
 def get_user_survey_details(request):
     data = JSONParser().parse(request)
     user_id = data['user_id']
+    print("user_id => ", data['user_id'])
     if not user_id:
         return JsonResponse({'error': 'User ID is required'}, status=400)
 
