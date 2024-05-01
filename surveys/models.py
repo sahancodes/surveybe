@@ -12,8 +12,8 @@ class Survey(models.Model):
         INDOOR_ENVIRONMENTAL_QUALITY = "EQ", _("Indoor Environmental Quality")
 
     survey_id = models.AutoField(primary_key=True)
-    survey_name = models.CharField(max_length=30)
-    survey_intro = models.CharField(max_length=100)
+    survey_name = models.CharField(max_length=200)
+    survey_intro = models.TextField(max_length=1000)
     survey_points = models.PositiveSmallIntegerField(default=25)
     survey_type = models.CharField(
         max_length=2,

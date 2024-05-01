@@ -93,5 +93,6 @@ class SurveyGroup(models.Model):
     trigger_times = models.JSONField(null=True)
     def __str__(self):
         return f"Group {self.group_id} {self.group_name}"
-                
+
+
     

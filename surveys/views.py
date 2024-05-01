@@ -58,3 +58,12 @@ def savesurvey(request):
         
     # except:
     #     return Response({"status": "survey error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['Get'])
+def getsurveydetails(request):
+
+    allsurveys = Survey.objects.all()
+    serializer = SurveySerializer(allsurveys, many=True)
+
+    return Response({'all_surveys':serializer.data}, status=200)
