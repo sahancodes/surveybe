@@ -15,6 +15,7 @@ class Survey(models.Model):
     survey_name = models.CharField(max_length=200)
     survey_intro = models.TextField(max_length=1000)
     survey_points = models.PositiveSmallIntegerField(default=25)
+    unfolding_survey = models.BooleanField(default=False)
     survey_type = models.CharField(
         max_length=2,
         choices=SurveyTypes.choices,
@@ -39,6 +40,7 @@ class Question(models.Model):
     survey_index = models.ForeignKey(Survey, on_delete=models.PROTECT, default=1)
     question_text = models.CharField(max_length=150)
     instruction = models. CharField(max_length=200)
+    in_first_q_set = models.BooleanField(default=False)
     question_type = models.CharField(
         max_length=3,
         choices=QuestionTypes.choices,
@@ -46,7 +48,7 @@ class Question(models.Model):
     )
 
     def __str__(self):
-        return self.question_text
+        return str(self.question_id) + "  " + str(self.question_text)
     
 class Answer(models.Model):
 
@@ -56,7 +58,8 @@ class Answer(models.Model):
     answer_id = models.AutoField(primary_key=True)
     question_id = models.ForeignKey(Question, on_delete=models.PROTECT)
     answers = models.JSONField(null=True, blank=True)        #Using JSON format we can send answers suitable to different question types in Question class
-    next_question_id = models.PositiveSmallIntegerField(null=True, blank=True)
+    # next_question_id = models.PositiveSmallIntegerField(null=True, blank=True)
+    unfoldings = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return str(self.answer_id) + "  " + str(self.question_id)

@@ -3,3 +3,6 @@
 /.venv
 /.vscode
 /myenv
+myenv 
+venv
+myenv/
