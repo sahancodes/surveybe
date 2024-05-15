@@ -6,18 +6,18 @@ class SurveySerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
         fields = ['survey_id', 'survey_name', 'survey_intro', 'survey_intro',
-                  'survey_type']
+                  'survey_type', 'unfolding_survey']
         
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ['question_id', 'question_text', 'instruction', 'question_type']
+        fields = ['question_id', 'question_text', 'instruction', 'question_type', 'in_first_q_set']
 
 
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['answer_id', 'question_id','answers', 'next_question_id']
+        fields = ['answer_id', 'question_id','answers', 'unfoldings']
 
 
 class CompletedSerializer(serializers.ModelSerializer):

@@ -8,6 +8,10 @@ from surveys.models import Survey, Question, Answer
 from accounts.models import Account
 from datetime import date
 from surveys.serializer import SurveySerializer, QuestionSerializer, AnswerSerializer, CompletedSerializer
+import logging
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 @api_view(['POST'])
@@ -29,9 +33,14 @@ def getsurvey(request):
                         "questions": question_serializer.data, "answers": answer_serializer.data}, 
                         status=status.HTTP_200_OK)
 
-    except:
-
-        return Response({"status": "bad request"}, status=status.HTTP_404_NOT_FOUND)
+    except Survey.DoesNotExist:
+        return Response({"status": "Survey not found"}, status=status.HTTP_404_NOT_FOUND)
+    except ValueError as e:
+        logger.error(f"ValueError: {e}")
+        return Response({"status": "Invalid survey_id"}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        return Response({"status": "bad request"}, status=status.HTTP_400_BAD_REQUEST)
     
 
 @api_view(['POST'])
