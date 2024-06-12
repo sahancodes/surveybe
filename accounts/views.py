@@ -214,8 +214,8 @@ def resetpassword(request, token):
 
 
 @api_view(['PUT'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def changeuserdetails(request, token):
     print(request, token)
     user = get_object_or_404(Account, authtoken__exact=token)
