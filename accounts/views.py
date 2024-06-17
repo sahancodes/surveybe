@@ -1,8 +1,9 @@
+import json
 from django.http import JsonResponse
 from django.urls import reverse
 from django.core.mail import send_mail
 from .models import Account, SurveyGroup
-from .serializers import AccountSerializer, InsertSerializer, SurveyGroupSerializer, UserSerializer, GetUserSerializer, IsUserLoggedIn, ForgotPasswordSerializer, UpdateSerializer
+from .serializers import AccountSerializer,InsertSerializer, SurveyGroupSerializer, UserSerializer, GetUserSerializer, IsUserLoggedIn, ForgotPasswordSerializer, UpdateSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, parser_classes
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
@@ -202,6 +203,7 @@ def forgotpassword(request):
 def resetpassword(request, token):
     user = get_object_or_404(get_user_model(), auth_token__exact=token)
 
+    
     #Create new password for user
     new_password = request.data.get('new_password')
     user.password = make_password(new_password)
@@ -210,6 +212,49 @@ def resetpassword(request, token):
     AuthToken.objects.filter(key=token).delete()
 
     return Response({'details': 'Password reset successful'})
+
+
+#----------------- CHANGE PASSWORD -------------------------#
+
+
+@api_view(['POST'])
+def changepassword(request,token):
+    if request.method == 'POST':
+        # Parse the request body
+        try:
+            body = json.loads(request.body)
+            user_id = body.get('user_id')
+            current_password = body.get('current_password')
+            new_password = body.get('new_password')
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+        # Check if all required fields are present
+        if not all([user_id, current_password, new_password]):
+            return JsonResponse({'error': 'Missing fields in request'}, status=400)
+
+        try:
+            # Fetch the user and check the token
+            account = get_object_or_404(Account, authtoken__exact=token)
+            print(account.userid)
+
+            user = get_object_or_404(User, username__exact = account.userid)
+            
+            # Verify the current password
+            if not user.check_password(current_password):
+                return JsonResponse({'error': 'Invalid current password'}, status=400)
+            
+            # Change the password
+            user.set_password(new_password)
+            user.save()
+
+            return JsonResponse({'success': 'Password changed successfully'}, status=200)
+        
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 
 

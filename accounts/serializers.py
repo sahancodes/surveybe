@@ -45,7 +45,7 @@ class UpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['email', 'age', 'gender', 'height', 'weight', 
-                  'best_hours', 'worksstarttime', 'workendtime']
+                  'best_hours', 'worksstarttime', 'workendtime', 'selfstatement']
 
 class SurveyGroupSerializer(serializers.ModelSerializer):
     # survey_id = serializers.IntegerField() 
@@ -56,3 +56,4 @@ class SurveyGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurveyGroup
         fields = ['survey_id', 'start_date', 'end_date', 'trigger_times']
+
