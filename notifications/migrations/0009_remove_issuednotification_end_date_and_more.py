@@ -21,13 +21,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='issuednotification',
             name='end_time',
-            field=models.TimeField(default=1),
+            field=models.TimeField(default="00:00"),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='issuednotification',
             name='start_time',
-            field=models.TimeField(default=1),
+            field=models.TimeField(default="00:00"),
             preserve_default=False,
         ),
     ]
