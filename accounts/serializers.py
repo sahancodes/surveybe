@@ -1,6 +1,6 @@
 #The process of going from python object to JSON format
 from rest_framework import serializers
-from accounts.models import Account
+from accounts.models import Account, SurveyGroup
 from django.contrib.auth.models import User
 
 
@@ -45,4 +45,15 @@ class UpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['email', 'age', 'gender', 'height', 'weight', 
-                  'best_hours', 'worksstarttime', 'workendtime']
+                  'best_hours', 'worksstarttime', 'workendtime', 'selfstatement']
+
+class SurveyGroupSerializer(serializers.ModelSerializer):
+    # survey_id = serializers.IntegerField() 
+    # start_date = serializers.DateField()
+    # end_date = serializers.DateField()
+    # trigger_times = serializers.JSONField()
+
+    class Meta:
+        model = SurveyGroup
+        fields = ['survey_id', 'start_date', 'end_date', 'trigger_times']
+

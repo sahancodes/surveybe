@@ -5,6 +5,7 @@ from django.db.models.signals import post_save, pre_save
 from django.utils.translation import gettext_lazy as _
 from leaderboard.models import Leaderboard
 
+
 # Create your models here.
 class Account(models.Model):
 
@@ -73,40 +74,28 @@ class Account(models.Model):
         profile.save()
 
     @classmethod
-    def update_contribution(cls, userid):
+    def update_contribution(cls, userid, surveyid):
+        from surveys.models import Survey
         profile = cls.objects.get(userid = userid)
         get_leaderboard_object= Leaderboard.objects.get(level = profile.level)
-        print(profile.level, get_leaderboard_object.level, get_leaderboard_object.contribution_addition)
-        profile.contribution = profile.contribution + get_leaderboard_object.contribution_addition
+        get_survey_object = Survey.objects.get(survey_id = surveyid)
+        print(profile.level, get_leaderboard_object.level, get_survey_object.survey_points)
+        profile.contribution = profile.contribution + get_survey_object.survey_points
         print(profile.contribution)
         profile.save()
-        
+ 
+class SurveyGroup(models.Model):
+    from surveys.models import Survey
+    group_id = models.AutoField(primary_key=True, auto_created=True)
+    group_name = models.CharField(max_length=50)
+    description = models.TextField()
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, default=1)
+    members = models.ManyToManyField(Account, related_name="user_groups")
+    start_date = models.DateField(default='2023-12-08')
+    end_date = models.DateField(default='2023-12-08')
+    trigger_times = models.JSONField(null=True)
+    def __str__(self):
+        return f"Group {self.group_id} {self.group_name}"
 
 
-# @receiver(pre_save, sender=Account)
-# def save_user_level(sender, instance, **kwargs):
-
-#     print("update_fields")
-    
-#     if instance.pk is not None:
-
-#         print("Hellow world")
-        
-#         #have to disconnect pre_save to not trigger the maximum recursion error
-#         #the pre_save is triggered just before an instance is getting saved
-#         #Hence the error
-#         pre_save.disconnect(save_user_level, sender=Account)
-
-#         if instance.contribution >= 100:
-#             instance.level = 5
-#             print(instance.level)
-#             instance.save()
-            
-            
-#             print("updated the leaderboard!")
-            
-#         pre_save.connect(save_user_level, sender=Account)
-
-#             # if 'contribution' in update_fields:
-                
     

@@ -17,7 +17,7 @@ class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(Account, on_delete=models.CASCADE, default=1)
     topic = models.CharField(max_length=50)
-    body = models.CharField(max_length=500)
+    body = models.TextField(max_length=2000)
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(
         choices=FeedbackCategory.choices, 

@@ -1,0 +1,597 @@
+{
+	"info": {
+		"_postman_id": "c603aa26-d276-4009-8f34-6fa11be4abde",
+		"name": "Survey Tool Django Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31147830"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Get all profiles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/allprofiles/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"allprofiles",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"tintin\",\r\n    \"email\": \"tintin@gmail.com\",\r\n    \"password\": \"Temp@1dd234\",\r\n    \"age\": \"78\",\r\n    \"gender\": \"M\",\r\n    \"height\": \"180\",\r\n    \"weight\": \"77\",\r\n    \"best_hours\": \"M\",\r\n    \"worksstarttime\": \"09:00:00\",\r\n    \"workendtime\": \"17:00:00\",\r\n    \"selfstatement\": \"Same\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/signup/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"signup",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\": \"78\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/getuser/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"getuser",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is user registered?",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\":\"1\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/isreg/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"isreg",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Wickmal\",\r\n    \"password\": \"Temp@1234\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout - [Error]",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Content-Type\": \"application/json\",\r\n    \"X-CSRFToken\": \"hmgIlhcPfi842QtuZ7yMuLdNX7HAFi57\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/logout/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"logout",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is User Logged In?",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\":\"70\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/isuser/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"isuser",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password [check reset]",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sahannetherlands@gmail.com\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/forgotpassword/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"forgotpassword",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check SignUp Availability",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"tharindu\",\r\n    \"email\": \"tharindu@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/checkuseremail/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"checkuseremail",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Survey Details",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 82\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/user-survey-details/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"user-survey-details",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Survey",
+			"item": [
+				{
+					"name": "Get Survey",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"survey_id\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/surveys/getsurvey/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"surveys",
+								"getsurvey",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Survey",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"survey_id\": \"1\",\r\n    \"user_id\": \"84\",\r\n    \"start_time\":\"14:19:37\",\r\n    \"end_time\": \"16:19:37\",\r\n    \"question_n_answer\": [ \r\n           { \r\n                \"questionID\": 2, \r\n                \"answer\": \"Very Satisfied\" \r\n           }, \r\n           { \r\n                \"questionID\": 3, \r\n                \"answer\": \"I would like to see improved user interface.\" \r\n            } \r\n      ] \r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/surveys/savesurvey/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"surveys",
+								"savesurvey",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get Notifications",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Add Notification",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":\"80\",\r\n    \"notification_id\": \"2\",\r\n    \"priority\": \"1\",\r\n    \"start_time\": \"16:19:37\",\r\n    \"end_time\": \"18:19:37\",\r\n    \"trigger_times\": {\r\n        \"1\":\"16:30:00\",\r\n        \"2\":\"17.30.00\",\r\n        \"3\":\"18.15.00\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/notifications/addnotification/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"notifications",
+								"addnotification",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Help Support",
+			"item": [
+				{
+					"name": "Get FAQs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/helpsupport/getfaqs/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"helpsupport",
+								"getfaqs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Help Ticket",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":\"80\",\r\n    \"topic\": \"Unable to access my account\",\r\n    \"body\": \"I'm having trouble logging into my account. Can you please assist me?\",\r\n    \"category\":\"APP\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/helpsupport/sendticket/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"helpsupport",
+								"sendticket",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Leaderboard",
+			"item": [
+				{
+					"name": "Get leaderboard values",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/leaderboard/ranks/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"leaderboard",
+								"ranks",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Complete Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/leaderboard/leaderstats/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"leaderboard",
+								"leaderstats",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feedback",
+			"item": [
+				{
+					"name": "Send Feedback",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": \"81\",\r\n    \"topic\": \"Application is not working\",\r\n    \"body\": \"This is just some dummy text\",\r\n    \"category\": \"APP\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/feedback/sendfeedback/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"feedback",
+								"sendfeedback",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

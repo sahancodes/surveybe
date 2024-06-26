@@ -1,8 +1,9 @@
+import json
 from django.http import JsonResponse
 from django.urls import reverse
 from django.core.mail import send_mail
-from .models import Account
-from .serializers import AccountSerializer, InsertSerializer, UserSerializer, GetUserSerializer, IsUserLoggedIn, ForgotPasswordSerializer, UpdateSerializer
+from .models import Account, SurveyGroup
+from .serializers import AccountSerializer,InsertSerializer, SurveyGroupSerializer, UserSerializer, GetUserSerializer, IsUserLoggedIn, ForgotPasswordSerializer, UpdateSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, parser_classes
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
@@ -18,6 +19,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.authtoken.models import Token
 from django.http import HttpRequest
 from rest_framework.request import Request
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # # Create your views here.
@@ -57,6 +59,11 @@ def signup(request):
                 new_acc.worksstarttime = data['worksstarttime']
                 new_acc.workendtime = data['workendtime']
                 new_acc.selfstatement = data['selfstatement']
+
+                new_acc.rank = None
+                new_acc.contribution = 0
+                new_acc.level = 1
+
                 new_acc.save()
 
             except Account.DoesNotExist:
@@ -65,11 +72,29 @@ def signup(request):
             return Response( i_serializer.data, status=status.HTTP_201_CREATED)    #Return a response to the request eg: 200 OK
 
 
+@api_view(['POST'])
+def signupavailablity(request):
 
-@api_view(['GET'])
+    # try:
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        snt_usrname = data['username']
+        snt_email = data['email']
+
+        print(snt_usrname, snt_email)
+
+        if User.objects.filter(username=snt_usrname).exists() or User.objects.filter(email=snt_email).exists():
+            return JsonResponse({'isAvailable': False})
+        else:
+            return JsonResponse({'isAvailable': True})
+    # except Exception as e:
+    #     return JsonResponse({'error': str(e)}, status=400)
+
+
+@api_view(['POST'])
 def getuser(request):
 
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = JSONParser().parse(request)
         find_acc = Account.objects.get(userid = int(data['userid']))
         get_acc = Account.objects.filter(userid = find_acc.userid)
@@ -103,8 +128,9 @@ def loginuser(request):
         login(request, user)
         _, token = AuthToken.objects.create(user)
         find_acc = Account.objects.filter(username=data['username'])
+        user = User.objects.get(username=data['username'])
         updt_token = find_acc.update(authtoken = token)
-        return Response({'token': token}, status=status.HTTP_200_OK)
+        return Response({'token': token, 'user_id': user.pk}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -177,6 +203,7 @@ def forgotpassword(request):
 def resetpassword(request, token):
     user = get_object_or_404(get_user_model(), auth_token__exact=token)
 
+    
     #Create new password for user
     new_password = request.data.get('new_password')
     user.password = make_password(new_password)
@@ -187,10 +214,53 @@ def resetpassword(request, token):
     return Response({'details': 'Password reset successful'})
 
 
+#----------------- CHANGE PASSWORD -------------------------#
+
+
+@api_view(['POST'])
+def changepassword(request,token):
+    if request.method == 'POST':
+        # Parse the request body
+        try:
+            body = json.loads(request.body)
+            user_id = body.get('user_id')
+            current_password = body.get('current_password')
+            new_password = body.get('new_password')
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+        # Check if all required fields are present
+        if not all([user_id, current_password, new_password]):
+            return JsonResponse({'error': 'Missing fields in request'}, status=400)
+
+        try:
+            # Fetch the user and check the token
+            account = get_object_or_404(Account, authtoken__exact=token)
+            print(account.userid)
+
+            user = get_object_or_404(User, username__exact = account.userid)
+            
+            # Verify the current password
+            if not user.check_password(current_password):
+                return JsonResponse({'error': 'Invalid current password'}, status=400)
+            
+            # Change the password
+            user.set_password(new_password)
+            user.save()
+
+            return JsonResponse({'success': 'Password changed successfully'}, status=200)
+        
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+
 
 @api_view(['PUT'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def changeuserdetails(request, token):
     print(request, token)
     user = get_object_or_404(Account, authtoken__exact=token)
@@ -206,5 +276,32 @@ def changeuserdetails(request, token):
         return Response(u_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# ------------------- GET ALL SURVEYS RELATED TO A GIVEN USER --------------------#
 
+@api_view(["POST"])
+def get_user_survey_details(request):
+    data = JSONParser().parse(request)
+    user_id = data['user_id']
+    print("user_id => ", data['user_id'])
+    if not user_id:
+        return JsonResponse({'error': 'User ID is required'}, status=400)
 
+    try:
+        user = Account.objects.get(userid=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+
+    # Filter SurveyGroup instances where the user is a member
+    survey_groups = SurveyGroup.objects.filter(members=user)
+
+    # Prepare data to send back
+    surveys_data = [{
+        'survey_id': sg.survey_id,  # Ensure survey_id is correctly pointing to a Survey object
+        'start_date': sg.start_date,
+        'end_date': sg.end_date,
+        'trigger_times': sg.trigger_times
+    } for sg in survey_groups]
+
+    survey_group_serializer = SurveyGroupSerializer(surveys_data, many=True)
+
+    return Response(survey_group_serializer.data, status=200)
