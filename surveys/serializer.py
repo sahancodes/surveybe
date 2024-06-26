@@ -6,7 +6,7 @@ class SurveySerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
         fields = ['survey_id', 'survey_name', 'survey_intro', 'survey_intro',
-                  'survey_type', 'unfolding_survey']
+                  'survey_type', 'unfolding_survey', 'survey_time']
         
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:

@@ -60,8 +60,8 @@ def signup(request):
                 new_acc.workendtime = data['workendtime']
                 new_acc.selfstatement = data['selfstatement']
 
-                new_acc.rank = 99
-                new_acc.contribution = 25
+                new_acc.rank = None
+                new_acc.contribution = 0
                 new_acc.level = 1
 
                 new_acc.save()

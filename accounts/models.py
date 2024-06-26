@@ -5,6 +5,7 @@ from django.db.models.signals import post_save, pre_save
 from django.utils.translation import gettext_lazy as _
 from leaderboard.models import Leaderboard
 
+
 # Create your models here.
 class Account(models.Model):
 
@@ -73,11 +74,13 @@ class Account(models.Model):
         profile.save()
 
     @classmethod
-    def update_contribution(cls, userid):
+    def update_contribution(cls, userid, surveyid):
+        from surveys.models import Survey
         profile = cls.objects.get(userid = userid)
         get_leaderboard_object= Leaderboard.objects.get(level = profile.level)
-        print(profile.level, get_leaderboard_object.level, get_leaderboard_object.contribution_addition)
-        profile.contribution = profile.contribution + get_leaderboard_object.contribution_addition
+        get_survey_object = Survey.objects.get(survey_id = surveyid)
+        print(profile.level, get_leaderboard_object.level, get_survey_object.survey_points)
+        profile.contribution = profile.contribution + get_survey_object.survey_points
         print(profile.contribution)
         profile.save()
  

@@ -57,7 +57,8 @@ def savesurvey(request):
     if completed_survey_serializer.is_valid():
         completed_survey_serializer.save(**additional_data)
         user_object = Account.objects.get(pk=int(completed_survey_serializer.data['user_id']))
-        user_object.update_contribution(user_object.userid)
+        survey_object = Survey.objects.get(survey_id = completed_survey_serializer.data['survey_id'])
+        user_object.update_contribution(user_object.userid, survey_object.survey_id)
         user_object.update_levels(user_object.userid)
         user_object.update_ranks()
         

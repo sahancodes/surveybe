@@ -21,6 +21,7 @@ class Survey(models.Model):
         choices=SurveyTypes.choices,
         default=SurveyTypes.PERSONAL_COMFORT,
     )
+    survey_time = models.PositiveSmallIntegerField(default=10)
 
     def __str__(self):
         return self.survey_name
