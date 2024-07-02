@@ -52,7 +52,7 @@ class Account(models.Model):
     level = models.PositiveSmallIntegerField(null=True, blank=True)
     contribution = models.PositiveIntegerField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
-    authtoken = models.CharField(max_length=255)
+    authtoken = models.CharField(max_length=255, null=True)
     
 
     def __str__(self):
