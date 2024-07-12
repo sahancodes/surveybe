@@ -4,10 +4,11 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from surveys.models import Survey, Question, Answer
+from surveys.models import Survey, Question, Answer, CompletedSurvey
 from accounts.models import Account
 from datetime import date
 from surveys.serializer import SurveySerializer, QuestionSerializer, AnswerSerializer, CompletedSerializer
+from accounts.serializers import SurveyResponseSerializer
 import logging
 
 # Set up logging
@@ -62,7 +63,9 @@ def savesurvey(request):
         user_object.update_levels(user_object.userid)
         user_object.update_ranks()
         
-        return Response({"status":"survey saved successfully"}, status=status.HTTP_200_OK)
+        return Response({"status":"success", "userid": user_object.userid, "level": user_object.level, 
+                         "rank": user_object.rank, "contribution": user_object.contribution}, 
+                         status=status.HTTP_200_OK)
     else:
         return Response({"status": "invalid serializer", "error": completed_survey_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -77,3 +80,10 @@ def getsurveydetails(request):
     serializer = SurveySerializer(allsurveys, many=True)
 
     return Response({'all_surveys':serializer.data}, status=200)
+
+
+@api_view(['Get'])
+def checksubmission(request, surveyid, userid):
+    surveysubmitted = CompletedSurvey.is_survey_submitted(surveyid, userid)
+
+    return Response({"submitted": surveysubmitted}, status=200)

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from accounts.models import Account
+from django.utils import timezone
 
 # Create your models here.
 class Survey(models.Model):
@@ -25,6 +26,8 @@ class Survey(models.Model):
 
     def __str__(self):
         return self.survey_name
+    
+    
 
 
 class Question(models.Model):
@@ -79,3 +82,44 @@ class CompletedSurvey(models.Model):
 
     def __str__(self):
         return str(self.response_id) + " - " + str(self.user_id) + " - " + str(self.survey_id)
+    
+    @classmethod
+    def is_survey_submitted(cls, surveyid, userid):
+        from accounts.models import SurveyGroup
+        # Get the survey associated with this CompletedSurvey instance
+        survey = Survey.objects.get(survey_id = surveyid)
+
+        completed_surveys = cls.objects.filter(
+            survey_id = surveyid,
+            user_id= userid,
+        )
+        
+        # Get the corresponding SurveyGroup instance (assuming one exists)
+        survey_group = SurveyGroup.objects.get(survey_id=surveyid)
+        
+        # Extract trigger times from survey group JSONField
+        trigger_times = survey_group.trigger_times
+        
+  
+        # Check if end_time of CompletedSurvey falls within any survey's live period
+        for index, trigger_time in trigger_times.items():
+            # Convert trigger time to datetime object
+            trigger_time_obj = timezone.datetime.strptime(trigger_time, "%H:%M").time()
+
+            print(trigger_time_obj)
+            
+            # Calculate survey start and end times based on trigger time and survey_time
+            survey_start_time = timezone.datetime.combine(timezone.now().date(), trigger_time_obj)
+            survey_end_time = survey_start_time + timezone.timedelta(minutes=survey.survey_time)
+            
+            
+            for completed_survey in completed_surveys:
+
+                completed_date_time = timezone.datetime.combine(completed_survey.date, completed_survey.end_time)
+                # print(f"survey_end_datetime type: {type(survey_end_time)}") 
+                # print(f"comlpeted_survey type: {type(survey_end_datetime)}") 
+                # Check if end_time of CompletedSurvey is between survey_start_time and survey_end_time
+                if survey_start_time <= completed_date_time <= survey_end_time:
+                    return True
+        
+        return False

@@ -6,4 +6,5 @@ urlpatterns = [
     path('getsurvey/', views.getsurvey),
     path('savesurvey/', views.savesurvey),
     path('getsurveydetails/', views.getsurveydetails),
+    path('checksurveysubmitted/<int:surveyid>/<int:userid>/', views.checksubmission),
 ]
