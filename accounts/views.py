@@ -293,12 +293,15 @@ def get_user_survey_details(request):
 
     # Filter SurveyGroup instances where the user is a member
     survey_groups = SurveyGroup.objects.filter(members=user)
+    # from surveys.models import Survey
+    # survey = Survey.objects.filter()
 
     # Prepare data to send back
     surveys_data = [{
         'survey_id': sg.survey_id,  # Ensure survey_id is correctly pointing to a Survey object
         'start_date': sg.start_date,
         'end_date': sg.end_date,
+        # 'survey_time':sg.
         'trigger_times': sg.trigger_times
     } for sg in survey_groups]
 

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+import pytz
 from accounts.models import Account
 from django.utils import timezone
 
@@ -99,8 +100,11 @@ class CompletedSurvey(models.Model):
         
         # Extract trigger times from survey group JSONField
         trigger_times = survey_group.trigger_times
-        
-  
+
+        # Set the local timezone (e.g., Europe/Amsterdam)
+        local_tz = pytz.timezone('Europe/Amsterdam')
+        local_now = timezone.now().astimezone(local_tz)  # Get current time in local timezone
+
         # Check if end_time of CompletedSurvey falls within any survey's live period
         for index, trigger_time in trigger_times.items():
             # Convert trigger time to datetime object
@@ -109,17 +113,23 @@ class CompletedSurvey(models.Model):
             print(trigger_time_obj)
             
             # Calculate survey start and end times based on trigger time and survey_time
-            survey_start_time = timezone.datetime.combine(timezone.now().date(), trigger_time_obj)
+            survey_start_time = timezone.datetime.combine(local_now.date(), trigger_time_obj)
+            survey_start_time = local_tz.localize(survey_start_time)  # Make it timezone aware
             survey_end_time = survey_start_time + timezone.timedelta(minutes=survey.survey_time)
             
             
             for completed_survey in completed_surveys:
 
                 completed_date_time = timezone.datetime.combine(completed_survey.date, completed_survey.end_time)
-                # print(f"survey_end_datetime type: {type(survey_end_time)}") 
-                # print(f"comlpeted_survey type: {type(survey_end_datetime)}") 
+                completed_date_time = local_tz.localize(completed_date_time)  # Ensure it's also timezone aware
+
                 # Check if end_time of CompletedSurvey is between survey_start_time and survey_end_time
                 if survey_start_time <= completed_date_time <= survey_end_time:
-                    return True
+                    print("Survey times: " + str(survey_start_time) + " - " + str(completed_date_time) + " - " + str(survey_end_time))
+                    print("Survey times: " + str(survey_start_time) + " - " + str(local_now) + " - " + str(survey_end_time))
+
+                    if survey_start_time <= local_now <= survey_end_time:
+                        print("Survey times: " + str(survey_start_time) + " - " + str(local_now) + " - " + str(survey_end_time))
+                        return True
         
         return False
