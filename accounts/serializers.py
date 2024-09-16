@@ -57,9 +57,12 @@ class SurveyGroupSerializer(serializers.ModelSerializer):
         model = SurveyGroup
         fields = ['survey_id', 'start_date', 'end_date', 'trigger_times']
 
+<<<<<<< HEAD
 
 class SurveyResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
         fields = ['rank', 'level', 'contribution']
+=======
+>>>>>>> c96a1289397de9c9a7a4235bd1205737c5ecaebc

@@ -25,5 +25,8 @@ class CompletedSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompletedSurvey
         fields = ['survey_id', 'user_id', 'start_time', 'end_time', 'question_n_answer']
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c96a1289397de9c9a7a4235bd1205737c5ecaebc
