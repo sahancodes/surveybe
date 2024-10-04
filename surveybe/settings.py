@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -130,6 +131,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+# Define STATICFILES_DIRS to include your static files directory
+STATICFILES_DIRS = [
+    'C:/inetpub/wwwroot/surveybe/static/',  # Directory where your static files are located
+]
+
+# STATIC_ROOT is where collectstatic will gather all static files in production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Directories where Django will search for additional static files
+# STATICFILES_DIRS = [
+#     'static/',  # This is for static files in your project
+# ]
+
+# PROJECT_DIR  = os.path.dirname(__file__)
+# STATIC_ROOT = 'C:/inetpub/wwwroot/surveybe/static/'
+# STATIC_ROOT = os.path.join(PROJECT_DIR,'static')
+# STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+#     os.path.join(PROJECT_DIR, 'staticfiles'),
+# )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
