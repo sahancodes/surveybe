@@ -83,10 +83,6 @@ class Account(models.Model):
         profile.contribution = profile.contribution + get_survey_object.survey_points
         print(profile.contribution)
         profile.save()
-<<<<<<< HEAD
-
-=======
->>>>>>> c96a1289397de9c9a7a4235bd1205737c5ecaebc
  
 class SurveyGroup(models.Model):
     from surveys.models import Survey
